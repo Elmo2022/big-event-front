@@ -88,6 +88,7 @@ const clearRegisterData = ()=>{
 </script>
 
 <template>
+
     <el-row class="login-page">
         <el-col :span="12" class="bg"></el-col>
         <el-col :span="6" :offset="3" class="form">
@@ -120,7 +121,11 @@ const clearRegisterData = ()=>{
                 </el-form-item>
             </el-form>
             <!-- 登录表单 -->
+         
             <el-form ref="form" size="large" autocomplete="off" v-else :model="registerData" :rules="rules">
+                <el-form-item>
+                  <div class="logo"></div>
+                </el-form-item>
                 <el-form-item>
                     <h1>登录</h1>
                 </el-form-item>
@@ -157,8 +162,12 @@ const clearRegisterData = ()=>{
     background-color: #fff;
 
     .bg {
-        background: url('@/assets/logo2.png') no-repeat 60% center / 240px auto,
+        background:  no-repeat 60% center / 240px auto,
             url('@/assets/login_bg.jpg') no-repeat center / cover;
+        border-radius: 0 20px 20px 0;
+    }
+    .logo{   
+    background: url('@/assets/logo2.png') ;
         border-radius: 0 20px 20px 0;
     }
 

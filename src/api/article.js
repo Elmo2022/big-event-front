@@ -30,6 +30,27 @@ export const articleListService = (params)=>{
 
 //文章添加
 export const articleAddService = (articleData)=>{
-    return request.post('/article',articleData);
-
+    return request.post('/article',articleData
+        // ,{
+        //     headers: {
+        //       'Content-Type': 'application/json' 
+        //     }
+        // }
+    )
 }
+
+//文章内容修改
+export const articleUpdateService = (articleData)=>{
+    return  request.put('/article',articleData)
+ }
+ 
+ //文章删除
+ export const articleDeleteService = (id)=>{
+     return request.delete('/article?id='+id)
+ }
+ 
+
+//  //文章修改
+// export const articleUpdateService = (categoryData)=>{
+//     return  request.put('/article',categoryData)
+//  }

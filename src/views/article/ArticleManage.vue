@@ -3,8 +3,16 @@ import {
     Edit,
     Delete
 } from '@element-plus/icons-vue'
+import { ref } from 'vue';
+import VMdEditor from '@kangc/v-md-editor';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+import '@kangc/v-md-editor/lib/theme/style/github.css';
+import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+//import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/index';
+//import '@kangc/v-md-editor/lib/plugins/katex/katex.css';
+VMdEditor.use(githubTheme);
+//VMdEditor.use(createKatexPlugin());
 
-import { ref } from 'vue'
 
 //文章分类数据模型
 const categorys = ref([
@@ -38,43 +46,12 @@ const categoryId = ref('')
 const state = ref('')
 
 //文章列表数据模型
-const articles = ref([
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
-    },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
-    },
-    {
-        "id": 5,
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "coverImg": "https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png",
-        "state": "草稿",
-        "categoryId": 2,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
-    },
-])
+const articles = ref([])
 
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(20)//总条数
-const pageSize = ref(3)//每页条数
+const pageSize = ref(5)//每页条数
 
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
@@ -89,7 +66,8 @@ const onCurrentChange = (num) => {
 
 
 //回显文章分类
-import { articleCategoryListService, articleListService,articleAddService } from '@/api/article.js'
+import { articleCategoryListService,articleListService,articleAddService,articleDeleteService,articleUpdateService } from '@/api/article.js'
+
 const articleCategoryList = async () => {
     let result = await articleCategoryListService();
 
@@ -130,6 +108,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { Plus } from '@element-plus/icons-vue'
 //控制抽屉是否显示
 const visibleDrawer = ref(false)
+const visibleUpdate = ref(false)
 //添加表单数据模型
 const articleModel = ref({
     title: '',
@@ -139,6 +118,13 @@ const articleModel = ref({
     state: ''
 })
 
+const updateModel= ref({
+    title: '',
+    categoryId: '',
+    coverImg: '',
+    content: '',
+    state: ''
+})
 
 //导入token
 import { useTokenStore } from '@/stores/token.js';
@@ -151,10 +137,74 @@ const uploadSuccess = (result)=>{
 }
 
 //添加文章
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElMessageBox} from 'element-plus'
+
+    const updateArticle  = async (clickState)=>{
+        console.log("打开了吗")
+//     //把发布状态赋值给数据模型
+      updateModel.value.state = clickState;
+
+//     //调用接口
+    let result = await articleUpdateService(updateModel.value);
+
+   ElMessage.success(result.msg? result.msg:'修改成功');
+
+//     //让抽屉消失
+      visibleUpdate.value = false;
+
+//     //刷新当前列表
+    articleList()
+}
+const deleteArticle = (row) => {
+    //提示用户  确认框
+    console.log(11111)
+    ElMessageBox.confirm(
+        '你确认要删除该文章信息吗?',
+        '温馨提示',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(async () => {
+            //调用接口
+            let result = await articleDeleteService(row.id);
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+            //刷新列表
+            articleList();
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: '用户取消了删除',
+            })
+        })
+}
+const visibleUpdateFunction =  async (row) => {
+    console.log(54242)
+    visibleUpdate.value = true;
+    //把当前行的数据赋值给数据模型
+    updateModel.value = row;
+}
+
+// //文章分类
+// import { categorys } from '@/stores/category.js';
+
+// //文章列表
+// import { articleList } from '@/stores/article.js';
+
+// //文章分类
+// import { articleCategoryList } from '@/stores/category.js';
+
+//文章分类
 const addArticle = async (clickState)=>{
     //把发布状态赋值给数据模型
     articleModel.value.state = clickState;
+  // console.log(articleModel.value);
 
     //调用接口
     let result = await articleAddService(articleModel.value);
@@ -206,8 +256,8 @@ const addArticle = async (clickState)=>{
             <el-table-column label="状态" prop="state"></el-table-column>
             <el-table-column label="操作" width="100">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" circle plain type="primary"></el-button>
-                    <el-button :icon="Delete" circle plain type="danger"></el-button>
+                    <el-button :icon="Edit" circle plain type="primary" @click="visibleUpdateFunction(row)"></el-button>
+                    <el-button :icon="Delete" circle plain type="danger" @click="deleteArticle(row)"></el-button>
                 </template>
             </el-table-column>
             <template #empty>
@@ -232,9 +282,7 @@ const addArticle = async (clickState)=>{
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="文章封面">
-
-                    <!-- 
+                                 <!-- 
                         auto-upload:设置是否自动上传
                         action:设置服务器接口路径
                         name:设置上传的文件字段名
@@ -242,6 +290,9 @@ const addArticle = async (clickState)=>{
                         on-success:设置上传成功的回调函数
                      -->
                    
+                <!-- <el-form-item label="文章封面">
+
+   
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="/api/upload"
                     name="file"
@@ -253,16 +304,69 @@ const addArticle = async (clickState)=>{
                             <Plus />
                         </el-icon>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="文章内容">
                     <div class="editor">
-                        <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
-                        </quill-editor>
+                        <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
+                        </quill-editor> -->
+
+                  <v-md-editor v-model="articleModel.content" />
+
                     </div>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="addArticle('已发布')">发布</el-button>
                     <el-button type="info" @click="addArticle('草稿')">草稿</el-button>
+                </el-form-item>
+            </el-form>
+        </el-drawer>
+        <el-drawer v-model="visibleUpdate" title="修改文章" direction="rtl" size="50%">
+            <!-- 添加文章表单 -->
+            <el-form :model="updateModel" label-width="100px">
+                <el-form-item label="文章标题">
+                    <el-input v-model="updateModel.title" placeholder="请输入标题"></el-input>
+                </el-form-item>
+                <el-form-item label="文章分类">
+                    <el-select placeholder="请选择" v-model="updateModel.categoryId">
+                        <el-option v-for="c in categorys" :key="c.id" :label="c.categoryName" :value="c.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                                 <!-- 
+                        auto-upload:设置是否自动上传
+                        action:设置服务器接口路径
+                        name:设置上传的文件字段名
+                        headers:设置上传的请求头
+                        on-success:设置上传成功的回调函数
+                     -->
+                   
+                <!-- <el-form-item label="文章封面">
+
+   
+                    <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
+                    action="/api/upload"
+                    name="file"
+                    :headers="{'Authorization':tokenStore.token}"
+                    :on-success="uploadSuccess"
+                    >
+                        <img v-if="articleModel.coverImg" :src="articleModel.coverImg" class="avatar" />
+                        <el-icon v-else class="avatar-uploader-icon">
+                            <Plus />
+                        </el-icon>
+                    </el-upload>
+                </el-form-item> -->
+                <el-form-item label="文章内容">
+                    <div class="editor">
+                        <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
+                        </quill-editor> -->
+
+                  <v-md-editor v-model="updateModel.content" />
+
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="updateArticle('已发布')">发布</el-button>
+                    <el-button type="info" @click="updateArticle('草稿')">草稿</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
