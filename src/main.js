@@ -24,3 +24,16 @@ app.use(router)
 //app.use(mavonEditor);
 app.use(ElementPlus,{locale});
 app.mount('#app')
+
+import VuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+import markdownItKatex from 'markdown-it-katex';
+import 'katex/dist/katex.min.css';
+
+VMdEditor.use(VuepressTheme);
+
+// 配置 markdown-it 插件
+VMdEditor.extendMarkdown((md) => {
+  md.use(markdownItKatex);
+});
+

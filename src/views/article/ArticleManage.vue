@@ -5,14 +5,14 @@ import {
 } from '@element-plus/icons-vue'
 import { ref } from 'vue';
 import VMdEditor from '@kangc/v-md-editor';
-import '@kangc/v-md-editor/lib/style/base-editor.css';
-import '@kangc/v-md-editor/lib/theme/style/github.css';
-import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
-//import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/index';
-//import '@kangc/v-md-editor/lib/plugins/katex/katex.css';
-VMdEditor.use(githubTheme);
-//VMdEditor.use(createKatexPlugin());
-
+// import '@kangc/v-md-editor/lib/style/base-editor.css';
+// import '@kangc/v-md-editor/lib/theme/style/github.css';
+// import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn';
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
+// VMdEditor.use(githubTheme);
+VMdEditor.use(createKatexPlugin());
 
 //文章分类数据模型
 const categorys = ref([
@@ -67,6 +67,7 @@ const onCurrentChange = (num) => {
 
 //回显文章分类
 import { articleCategoryListService,articleListService,articleAddService,articleDeleteService,articleUpdateService } from '@/api/article.js'
+import {toQQ,toQQzone,toWeibo} from '@/utils/share.js'
 
 const articleCategoryList = async () => {
     let result = await articleCategoryListService();
@@ -191,14 +192,6 @@ const visibleUpdateFunction =  async (row) => {
     updateModel.value = row;
 }
 
-// //文章分类
-// import { categorys } from '@/stores/category.js';
-
-// //文章列表
-// import { articleList } from '@/stores/article.js';
-
-// //文章分类
-// import { articleCategoryList } from '@/stores/category.js';
 
 //文章分类
 const addArticle = async (clickState)=>{
@@ -217,6 +210,34 @@ const addArticle = async (clickState)=>{
     //刷新当前列表
     articleList()
 }
+const QQshare = async ()=>{
+    let url="http://123.57.188.172:8888/big-event/article/manage"
+    let  title="欢迎大家观看我的笔记"
+    //把发布状态赋值给数据模型
+   toQQ(url,title)
+}
+const QQzoneshare = async ()=>{
+    let url="http://123.57.188.172:8888/big-event/article/manage"
+    let  title="欢迎大家观看我的笔记"
+    //把发布状态赋值给数据模型
+   toQQzone(url,title)
+}
+const weiboshare = async ()=>{
+    let url="http://123.57.188.172:8888/big-event/article/manage"
+    let  title="欢迎大家观看我的笔记"
+    //把发布状态赋值给数据模型
+   toWeibo(url,title)
+}
+//  const renderMath= ()=>{
+
+//       const element = document.querySelector('.test')
+//         console.log(element)
+   
+//         katex.render("$$a^b$$", element, {
+        
+//         }
+//     );
+//     }
 </script>
 <template>
     <el-card class="page-container">
@@ -310,7 +331,7 @@ const addArticle = async (clickState)=>{
                         <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
                         </quill-editor> -->
 
-                  <v-md-editor v-model="articleModel.content" />
+                  <v-md-editor v-model="articleModel.content"   />
 
                     </div>
                 </el-form-item>
@@ -332,35 +353,13 @@ const addArticle = async (clickState)=>{
                         </el-option>
                     </el-select>
                 </el-form-item>
-                                 <!-- 
-                        auto-upload:设置是否自动上传
-                        action:设置服务器接口路径
-                        name:设置上传的文件字段名
-                        headers:设置上传的请求头
-                        on-success:设置上传成功的回调函数
-                     -->
-                   
-                <!-- <el-form-item label="文章封面">
 
-   
-                    <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
-                    name="file"
-                    :headers="{'Authorization':tokenStore.token}"
-                    :on-success="uploadSuccess"
-                    >
-                        <img v-if="articleModel.coverImg" :src="articleModel.coverImg" class="avatar" />
-                        <el-icon v-else class="avatar-uploader-icon">
-                            <Plus />
-                        </el-icon>
-                    </el-upload>
-                </el-form-item> -->
                 <el-form-item label="文章内容">
                     <div class="editor">
                         <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
                         </quill-editor> -->
 
-                  <v-md-editor v-model="updateModel.content" />
+                  <v-md-editor v-model="updateModel.content"  />
 
                     </div>
                 </el-form-item>
@@ -368,9 +367,19 @@ const addArticle = async (clickState)=>{
                     <el-button type="primary" @click="updateArticle('已发布')">发布</el-button>
                     <el-button type="info" @click="updateArticle('草稿')">草稿</el-button>
                 </el-form-item>
+                <el-form-item label="分享文章">
+                    
+                    <el-image @click="QQshare" style="width: 5%;height: 50%;margin-left: 3%;margin-top: 5%" alt="hhh" src="https://zhangtianbo.oss-cn-beijing.aliyuncs.com/4cc0fb12-5bbb-420a-bd9c-21b324ae38ce.png"></el-image>
+                    <el-image @click="QQzoneshare" style="width: 5%;height: 50%;margin-left: 3%;margin-top: 5%" alt="hhh" src="https://zhangtianbo.oss-cn-beijing.aliyuncs.com/9cce228e-3aef-421e-a6ea-8202ac3da29b.png"></el-image>
+                    <el-image @click="weiboshare" style="width: 5%;height: 50%;margin-left: 3%;margin-top: 5%" alt="hhh" src="https://zhangtianbo.oss-cn-beijing.aliyuncs.com/4d818202-491a-4ece-8d71-660f6f8a4ba5.png"></el-image>
+                </el-form-item>
             </el-form>
+            
         </el-drawer>
+     
+        
     </el-card>
+  
 </template>
 <style lang="scss" scoped>
 .page-container {

@@ -12,6 +12,8 @@
     "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.5.1",
     "element-plus": "^2.4.1",
+    "katex": "^0.16.10",
+    "markdown-it-katex": "^2.0.3",
     "mavon-editor": "^2.10.4",
     "pinia": "^2.1.7",
     "pinia-persistedstate-plugin": "^0.1.0",
