@@ -51,7 +51,7 @@ const updateUserInfo = async ()=>{
                         <el-input v-model="userInfo.email"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="updateUserInfo">提交修改</el-button>
+                        <el-button  @click="updateUserInfo" style="background-color: #f65353;color: #fff;">提交修改</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>

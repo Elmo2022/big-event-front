@@ -74,21 +74,23 @@ const handleCommand = (command)=>{
     <el-container class="layout-container">
         <!-- 左侧菜单 -->
         <el-aside width="200px">
-            <div class="el-aside__logo"></div>
+            <div class="el-aside__logo" style="display: flex;align-items: center;justify-content: center;">
+                <div>校园小红书</div>
+            </div>
             <!-- element-plus的菜单标签 -->
-            <el-menu active-text-color="#ffd04b" background-color="#232323"  text-color="#fff"
+            <el-menu active-text-color="#f65353" background-color="#ffffff"  text-color="#000000"
                 router>
-                <el-menu-item index="/article/category">
+                <el-menu-item index="/homePage">
                     <el-icon>
                         <Management />
                     </el-icon>
-                    <span>文章分类</span>
+                    <span>首页</span>
                 </el-menu-item>
-                <el-menu-item index="/article/manage">
+                <el-menu-item index="/publishPost">
                     <el-icon>
                         <Promotion />
                     </el-icon>
-                    <span>文章管理</span>
+                    <span>发布帖子</span>
                 </el-menu-item>
                 <el-sub-menu >
                     <template #title>
@@ -127,7 +129,7 @@ const handleCommand = (command)=>{
                 <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->
                 <el-dropdown placement="bottom-end" @command="handleCommand">
                     <span class="el-dropdown__box">
-                        <!-- <el-avatar :src="userInfoStore.info.userPic? userInfoStore.info.userPic:avatar" /> -->
+                        <el-avatar :src="userInfoStore.info.userPic? userInfoStore.info.userPic:avatar" />
                         <el-icon>
                             <CaretBottom />
                         </el-icon>
@@ -144,13 +146,10 @@ const handleCommand = (command)=>{
             </el-header>
             <!-- 中间区域 -->
             <el-main>
-                <!-- <div style="width: 1290px; height: 570px;border: 1px solid red;">
-                    内容展示区
-                </div> -->
                 <router-view></router-view>
             </el-main>
             <!-- 底部区域 -->
-            <el-footer>个人云笔记 ©2024 Created by 张天博</el-footer>
+            <el-footer>校园小红书 ©2025 Created by 张天博</el-footer>
         </el-container>
     </el-container>
 </template>
@@ -160,11 +159,11 @@ const handleCommand = (command)=>{
     height: 100vh;
 
     .el-aside {
-        background-color: #232323;
+        background-color: #ffffff;
 
         &__logo {
             height: 120px;
-            background: url('@/assets/logo2.png') no-repeat center / 120px auto;
+            // background: url('@/assets/logo2.png') no-repeat center / 120px auto;
         }
 
         .el-menu {

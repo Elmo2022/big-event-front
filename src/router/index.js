@@ -4,19 +4,23 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginVue from '@/views/Login.vue'
 import LayoutVue from '@/views/Layout.vue'
 
-import ArticleCategoryVue from '@/views/article/ArticleCategory.vue'
-import ArticleManageVue from '@/views/article/ArticleManage.vue'
+// import ArticleCategoryVue from '@/views/article/ArticleCategory.vue'
+// import ArticleManageVue from '@/views/article/ArticleManage.vue'
 import UserAvatarVue from '@/views/user/UserAvatar.vue'
 import UserInfoVue from '@/views/user/UserInfo.vue'
 import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
-
+import homePage from '@/views/homePage/index.vue'
+import publishPost from '@/views/publishPost/index.vue'
 //定义路由关系
 const routes = [
     { path: '/login', component: LoginVue },
+  
     {
-        path: '/', component: LayoutVue,redirect:'/article/manage', children: [
-            { path: '/article/category', component: ArticleCategoryVue },
-            { path: '/article/manage', component: ArticleManageVue },
+        path: '/', component: LayoutVue, redirect: '/homePage', children: [
+            {path: '/homePage', component: homePage},
+            {path: '/publishPost', component: publishPost},
+            // { path: '/article/category', component: ArticleCategoryVue },
+            // { path: '/article/manage', component: ArticleManageVue },
             { path: '/user/info', component: UserInfoVue },
             { path: '/user/avatar', component: UserAvatarVue },
             { path: '/user/resetPassword', component: UserResetPasswordVue }
@@ -26,7 +30,7 @@ const routes = [
 
 //创建路由器
 const router = createRouter({
-    history: createWebHistory('/big-event/'),
+    history: createWebHistory('/campusForum/'),
     routes: routes
 })
 

@@ -311,7 +311,7 @@ const weiboshare = async ()=>{
                         on-success:设置上传成功的回调函数
                      -->
                    
-                <!-- <el-form-item label="文章封面">
+                <el-form-item label="文章封面">
 
    
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
@@ -325,7 +325,7 @@ const weiboshare = async ()=>{
                             <Plus />
                         </el-icon>
                     </el-upload>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="文章内容">
                     <div class="editor">
                         <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html">
