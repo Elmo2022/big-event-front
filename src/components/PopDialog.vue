@@ -2,14 +2,19 @@
   <div style="border-radius: 10px">
     <el-button @click="openDialog">打开视频弹窗</el-button>
     <el-dialog
-      style="border-radius: 15px; height: 560px"
+      style="
+        border-radius: 15px;
+        height: 600px;
+        width: 900px;
+        margin-top: 100px;
+      "
       v-model="dialogVisible"
     >
       <div class="container" style="width: 100%; height: 100%">
         <div
           class="left"
           style="
-            width: 320px;
+            width: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,17 +23,14 @@
           <VideoPlayer />
         </div>
         <div
-          class="right"
-          style="
-            height: 100%;
-            width: 500px;
-            display: flex;
-            flex-wrap: wrap;
-          "
+          class="right-content"
+          style="height: 100%; width: 450px; display: flex; flex-wrap: wrap"
         >
-          <div class="speak" style="width: 420px; height: 60px">作者头像和名称</div>
+          <div class="speak" style="width: 100%; height: 60px">
+            作者头像和名称
+          </div>
           <div style="overflow: auto; background-color: aqua">
-            <div style="height: 340px">
+            <div style="height: 440px; width: 100%">
               <div class="title">
                 <h3>帖子名称</h3>
                 <p>{{ videoIntroduction }}</p>
@@ -42,63 +44,34 @@
                 <ul>
                   <li v-for="(comment, index) in comments" :key="index">
                     {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
-                    {{ comment }}
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="speak" style="width: 420px; height: 60px">发言区</div>
+          <div
+            class="drawer-con"
+            style="width: 100%; height: 60px; background-color: #000000"
+          >
+            发言区
+            <button @click="showDrawer">发言</button>
+            <button>取消</button>
+          </div>
         </div>
       </div>
     </el-dialog>
+    <el-drawer
+      append-to=".right-content"
+      show-close="false"
+      :with-header="false"
+      v-model="drawerShow"
+      direction="btt"
+      :before-close="handleClose"
+    >
+      <el-input></el-input>
+      <el-button>哈哈哈</el-button>
+    </el-drawer>
+
   </div>
 </template>
 
@@ -126,6 +99,11 @@ const videoRef = ref(null);
 const openDialog = () => {
   console.log("点击按钮事件触发");
   dialogVisible.value = true;
+};
+
+const drawerShow = ref(false);
+const showDrawer = () => {
+  drawerShow.value = true;
 };
 </script>
 
